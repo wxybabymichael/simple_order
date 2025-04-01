@@ -20,7 +20,7 @@ You should see the login page (or register page if you navigate there). The firs
 
 Register or log in.
 
-Go to the "上传数据" page to upload your Excel file.
+Go to the "upload" page to upload your Excel file.
 
 The main page will display the processed data from the database.
 
