@@ -1,12 +1,12 @@
 # simple_order
 
-Before:
+##Before:
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python.exe -m pip install --upgrade pip
 pip install -r .\requirements.txt
 
-Running the Application:
+## Running the Application:
 Make sure you have installed all requirements: pip install -r requirements.txt
 Navigate to the simple_order_display directory in your terminal.
 Run the Flask app: python app.py
