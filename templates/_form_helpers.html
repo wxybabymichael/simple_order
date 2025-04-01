@@ -1,0 +1,17 @@
+{% macro render_field(field) %}
+  <div class="form-group">
+    {{ field.label(class="form-label") }}
+    {% if field.type == 'BooleanField' %}
+      {{ field(class="form-check-input") }}
+    {% else %}
+      {{ field(class="form-control" + (" is-invalid" if field.errors else ""))|safe }}
+    {% endif %}
+    {% if field.errors %}
+      <div class="invalid-feedback">
+        {% for error in field.errors %}
+          <span>{{ error }}</span>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+{% endmacro %}

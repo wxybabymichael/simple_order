@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <h2>编辑订单: {{ order.order_id }}</h2>
+        <hr>
+        <form method="POST" action="{{ url_for('edit_order', order_id=order.id) }}">
+            {{ form.hidden_tag() }} {# CSRF token #}
+
+            {# Display non-editable fields for info #}
+            <div class="mb-3 row">
+                 <label class="col-sm-3 col-form-label">订单编号:</label>
+                 <div class="col-sm-9">
+                    <input type="text" readonly class="form-control-plaintext" value="{{ order.order_id }}">
+                 </div>
+            </div>
+             <div class="mb-3 row">
+                 <label class="col-sm-3 col-form-label">券码:</label>
+                 <div class="col-sm-9">
+                     <input type="text" readonly class="form-control-plaintext" value="{{ masked_coupon }}">
+                 </div>
+            </div>
+             <div class="mb-3 row">
+                 <label class="col-sm-3 col-form-label">发放时间:</label>
+                 <div class="col-sm-9">
+                     <input type="text" readonly class="form-control-plaintext" value="{{ order.issue_time.strftime('%Y-%m-%d %H:%M:%S') if order.issue_time else '-' }}">
+                 </div>
+            </div>
+             <div class="mb-3 row">
+                 <label class="col-sm-3 col-form-label">有效期 (月):</label>
+                 <div class="col-sm-9">
+                     <input type="text" readonly class="form-control-plaintext" value="{{ order.validity_months }}">
+                 </div>
+            </div>
+             <div class="mb-3 row">
+                 <label class="col-sm-3 col-form-label">状态:</label>
+                 <div class="col-sm-9">
+                     <input type="text" readonly class="form-control-plaintext" value="{{ order.status }}">
+                 </div>
+            </div>
+             <hr>
+             {# Editable fields using the form #}
+             <div class="mb-3 row">
+                {{ form.supplier_name.label(class="col-sm-3 col-form-label") }}
+                <div class="col-sm-9">
+                    {{ form.supplier_name(class="form-control" + (" is-invalid" if form.supplier_name.errors else "")) }}
+                    {% if form.supplier_name.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.supplier_name.errors %}<span>{{ error }}</span>{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+             <div class="mb-3 row">
+                {{ form.customer_name.label(class="col-sm-3 col-form-label") }}
+                <div class="col-sm-9">
+                    {{ form.customer_name(class="form-control" + (" is-invalid" if form.customer_name.errors else "")) }}
+                    {% if form.customer_name.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.customer_name.errors %}<span>{{ error }}</span>{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                {{ form.amount.label(class="col-sm-3 col-form-label") }}
+                <div class="col-sm-9">
+                    {{ form.amount(class="form-control" + (" is-invalid" if form.amount.errors else ""), step="0.01") }} {# Allow decimals #}
+                    {% if form.amount.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.amount.errors %}<span>{{ error }}</span>{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                {{ form.phone.label(class="col-sm-3 col-form-label") }}
+                <div class="col-sm-9">
+                    {{ form.phone(class="form-control" + (" is-invalid" if form.phone.errors else "")) }}
+                    {% if form.phone.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.phone.errors %}<span>{{ error }}</span>{% endfor %}
+                        </div>
+                    {% endif %}
+                    <small class="form-text text-muted">当前显示: {{ masked_phone }}</small> {# Show masked version for reference #}
+                </div>
+            </div>
+
+            {# Add other editable fields here if needed (e.g., status, validity) #}
+
+            <div class="mb-3 row">
+                <div class="col-sm-9 offset-sm-3">
+                    {{ form.submit(class="btn btn-primary") }}
+                    <a href="{{ url_for('index') }}" class="btn btn-secondary ms-2">取消</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

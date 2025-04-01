@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <h2>上传 Excel 文件</h2>
+        <p>请上传包含以下列的 Excel 文件： <strong>供应商名称</strong> (可选), <strong>客户名称</strong>, <strong>金额</strong>, <strong>发放时间</strong>, <strong>电话</strong>。</p>
+        <p><small>注意：系统会自动生成订单编号和券码。</small></p>
+        <form method="POST" action="{{ url_for('upload') }}" enctype="multipart/form-data">
+            {{ form.hidden_tag() }} {# CSRF token #}
+            <div class="mb-3">
+                {{ form.excel_file.label(class="form-label") }}
+                {{ form.excel_file(class="form-control" + (" is-invalid" if form.excel_file.errors else "")) }}
+                {% if form.excel_file.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in form.excel_file.errors %}<span>{{ error }}</span>{% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="mb-3">
+                {{ form.submit(class="btn btn-primary") }}
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

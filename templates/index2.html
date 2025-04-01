@@ -1,0 +1,161 @@
+{% extends "base.html" %} {# Inherits the base layout from base.html #}
+
+{% block content %} {# Defines the main content block for this page #}
+    <h2 class="mb-3">订单记录</h2> {# Page Title #}
+
+    <!-- Search Form -->
+    {# Uses GET method so search parameters appear in URL and can be bookmarked/shared #}
+    <form method="GET" action="{{ url_for('index') }}" class="row g-3 mb-4 align-items-end border p-3 rounded bg-light shadow-sm">
+        <div class="col-md-4">
+            <label for="supplier_query" class="form-label fw-bold">供应商名称</label>
+            {# Input field for supplier name search. 'value' attribute pre-fills with current search term. #}
+            <input type="text" class="form-control form-control-sm" id="supplier_query" name="supplier_query" value="{{ supplier_query or '' }}" placeholder="输入供应商关键字">
+        </div>
+        <div class="col-md-4">
+            <label for="customer_query" class="form-label fw-bold">客户名称</label>
+            {# Input field for customer name search. 'value' attribute pre-fills with current search term. #}
+            <input type="text" class="form-control form-control-sm" id="customer_query" name="customer_query" value="{{ customer_query or '' }}" placeholder="输入客户关键字">
+        </div>
+        <div class="col-md-auto mt-3 mt-md-0"> {# Adjust margin for different screen sizes #}
+            <button type="submit" class="btn btn-primary btn-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search me-1" viewBox="0 0 16 16">
+                  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                </svg>
+                搜索
+            </button>
+            {# Reset link to clear search filters and show all records #}
+            <a href="{{ url_for('index') }}" class="btn btn-secondary btn-sm ms-2">
+                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-clockwise me-1" viewBox="0 0 16 16">
+                   <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+                   <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+                 </svg>
+                重置
+            </a>
+        </div>
+    </form>
+    <!-- End Search Form -->
+
+    <!-- Orders Table -->
+    <div class="table-responsive"> {# Makes table horizontally scrollable on small screens #}
+         <table class="table table-striped table-hover table-bordered table-sm align-middle"> {# Added bordered, align-middle for better visuals #}
+            <thead class="table-light"> {# Light background for header #}
+                <tr>
+                    {# Table Headers #}
+                    <th scope="col">序号</th>
+                    <th scope="col">订单编号</th>
+                    <th scope="col">客户名称</th>
+                    {% if not hide_supplier_column %} {# Conditionally display Supplier Name header #}
+                        <th scope="col">供应商名称</th>
+                    {% endif %}
+                    <th scope="col" class="text-end">金额</th> {# Align amount right #}
+                    <th scope="col">发放时间</th>
+                    <th scope="col">电话</th>
+                    <th scope="col">券码</th>
+                    <th scope="col" class="text-center">有效期 (月)</th> {# Center validity #}
+                    <th scope="col">状态</th>
+                    <th scope="col" class="text-center">操作</th> {# Actions Column Header, centered #}
+                </tr>
+            </thead>
+            <tbody>
+            {# Loop through the orders passed from the Flask route for the current page #}
+            {% for order in orders %}
+                <tr>
+                    {# Calculate sequential index across pages #}
+                    <td>{{ loop.index + pagination.per_page * (pagination.page - 1) }}</td>
+                    <td>{{ order.order_id }}</td>
+                    <td>{{ order.customer_name }}</td>
+                    {% if not hide_supplier_column %} {# Conditionally display Supplier Name data cell #}
+                         <td>{{ order.supplier_name if order.supplier_name else '-' }}</td> {# Show supplier or '-' if empty #}
+                    {% endif %}
+                    <td class="text-end">{{ "%.2f"|format(order.amount) }}</td> {# Format amount to 2 decimal places, align right #}
+                    {# Format datetime nicely, show '-' if null #}
+                    <td>{{ order.issue_time.strftime('%Y-%m-%d %H:%M:%S') if order.issue_time else '-' }}</td>
+                    <td>{{ order.masked_phone }}</td> {# Display masked phone number #}
+                    <td>{{ order.masked_coupon_code }}</td> {# Display masked coupon code #}
+                    <td class="text-center">{{ order.validity_months }}</td> {# Center validity period #}
+                    <td><span class="badge bg-success">{{ order.status }}</span></td> {# Display status as a badge #}
+                    <td class="text-center"> {# Action Buttons Cell, centered #}
+                        {# Edit Button - links to the edit_order route with the specific order ID #}
+                        <a href="{{ url_for('edit_order', order_id=order.id) }}" class="btn btn-outline-warning btn-sm py-0 px-1 me-1" title="编辑">
+                            {# Edit Icon (Bootstrap Icons) #}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                              <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                              <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                            </svg>
+                        </a>
+                        {# Delete Button - wrapped in a form to use POST method for deletion #}
+                        {# Uses inline JavaScript for confirmation dialog #}
+                        <form action="{{ url_for('delete_order', order_id=order.id) }}" method="POST" style="display: inline;" onsubmit="return confirm('确定要删除订单 {{ order.order_id }} 吗？');">
+                            <button type="submit" class="btn btn-outline-danger btn-sm py-0 px-1" title="删除">
+                                {# Trash Icon (Bootstrap Icons) #}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                  <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                                  <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                                </svg>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            {# Fallback message if no orders match the current filters/page #}
+            {% else %}
+                <tr>
+                    {# Adjust colspan dynamically based on whether the supplier column is hidden #}
+                    <td colspan="{{ 10 if hide_supplier_column else 11 }}" class="text-center fst-italic text-muted py-3">没有找到符合条件的订单记录。</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <!-- End Orders Table -->
+
+    <!-- Pagination Info and Searched Supplier Display -->
+    <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap"> {# Added flex-wrap for smaller screens #}
+        {# Display record range and total count #}
+        <p class="mb-1 mb-md-0">{{ display_info }}</p>
+        {# Conditionally display the supplier name if a supplier-only search was performed #}
+        {% if searched_supplier_name %}
+            <p class="mb-1 mb-md-0 text-muted small">当前显示供应商: <strong class="text-dark">{{ searched_supplier_name }}</strong></p>
+        {% endif %}
+    </div>
+
+    <!-- Pagination Links -->
+    {# Only show pagination controls if there are multiple pages #}
+    {% if pagination.pages > 1 %}
+    <nav aria-label="订单记录分页" class="mt-3">
+        <ul class="pagination justify-content-center flex-wrap"> {# Added flex-wrap #}
+            {# Previous Page Link - disabled if on the first page #}
+            <li class="page-item {% if not pagination.has_prev %}disabled{% endif %}">
+                {# Link includes current search parameters to maintain filter state #}
+                <a class="page-link" href="{{ url_for('index', page=pagination.prev_num, supplier_query=supplier_query, customer_query=customer_query) if pagination.has_prev else '#' }}" aria-label="上一页">
+                     <span aria-hidden="true">&laquo;</span>
+                     <span class="visually-hidden">上一页</span>
+                </a>
+            </li>
+            {# Page Number Links - iterates through page numbers provided by pagination object #}
+            {# iter_pages helps create '...' gaps for long page lists #}
+            {% for page_num in pagination.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+                {% if page_num %}
+                    {# Highlight the current page as active #}
+                    <li class="page-item {% if page_num == pagination.page %}active{% endif %}">
+                        {# Link includes current search parameters #}
+                        <a class="page-link" href="{{ url_for('index', page=page_num, supplier_query=supplier_query, customer_query=customer_query) }}">{{ page_num }}</a>
+                    </li>
+                {% else %}
+                    {# Display '...' for skipped page numbers #}
+                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                {% endif %}
+            {% endfor %}
+            {# Next Page Link - disabled if on the last page #}
+            <li class="page-item {% if not pagination.has_next %}disabled{% endif %}">
+                {# Link includes current search parameters #}
+                <a class="page-link" href="{{ url_for('index', page=pagination.next_num, supplier_query=supplier_query, customer_query=customer_query) if pagination.has_next else '#' }}" aria-label="下一页">
+                    <span aria-hidden="true">&raquo;</span>
+                    <span class="visually-hidden">下一页</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    {% endif %}
+    <!-- End Pagination Links -->
+
+{% endblock %} {# End of the content block #}
