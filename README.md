@@ -43,8 +43,10 @@ pip config set global.index-url https://mirrors.aliyun.com/pypi/simple/
 ## Running the Application:
 1. Make sure you have installed all requirements: pip install -r requirements.txt
 2. Navigate to the simple_order directory in your terminal.
-3. Activate the virtual environment
-4. Run the Flask app: python app.py
+3. Activate the virtual environment:
+   ```.\.venv\Scripts\Activate.ps1```
+5. Run the Flask app:
+   ```python app.py```
 
 ## Usage:
 Open your web browser and go to http://127.0.0.1:5000 (or the address shown in the terminal).
@@ -67,6 +69,8 @@ Make sure your Excel file has headers matching the expected names (or adjust exp
 供应商C	吕晓辉	28.87	2024/08/06 10:12:07	15112349599
 
 ### common use
+```
 cd simple_order
 .\.venv\Scripts\Activate.ps1
 python app.py
+```
