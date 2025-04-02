@@ -31,7 +31,7 @@ pip config set global.index-url https://mirrors.aliyun.com/pypi/simple/
     ```python -m venv .venv```
 4. Activate the virtual environment:
     ```.\.venv\Scripts\Activate.ps1```
-5. Upgrade the pip:
+5. Upgrade the pip (if you need):
     ```python.exe -m pip install --upgrade pip```
 6. Install the required packages:
     ```pip install -r .\requirements.txt```
