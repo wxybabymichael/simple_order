@@ -68,7 +68,7 @@ Make sure your Excel file has headers matching the expected names (or adjust exp
 供应商B	刘影丽	29.38	2024-08-06 10:12:07	18912344926
 供应商C	吕晓辉	28.87	2024/08/06 10:12:07	15112349599
 
-### common use
+## Common Use
 ```
 cd simple_order
 .\.venv\Scripts\Activate.ps1
