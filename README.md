@@ -37,7 +37,7 @@ pip config set global.index-url https://mirrors.aliyun.com/pypi/simple/
 7. Create a database:
     ```python app.py db create```
 8. Run the application:
-    ```python app.py run```
+    ```python app.py```
 
 
 ## Running the Application:
