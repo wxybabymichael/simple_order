@@ -1,4 +1,4 @@
-# simple_order
+# Simple Order
 
 ## Description:
 This is a simple order management system built with Flask and SQLAlchemy. It allows users to register, log in, and upload Excel files containing order data. The system processes the data and stores it in a database, which can then be viewed on the main page.
