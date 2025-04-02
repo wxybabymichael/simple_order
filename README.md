@@ -22,7 +22,6 @@ This is a simple order management system built with Flask and SQLAlchemy. It all
 ```
 pip config set global.index-url https://mirrors.aliyun.com/pypi/simple/
 ```
-    set in 'pip.ini' file for windows
 
 ### Installation Steps:
 1. Clone the repository to your local machine.
