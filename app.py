@@ -135,6 +135,20 @@ def index():
                            supplier_query=supplier_query, # To pre-fill search boxes
                            customer_query=customer_query_string) # Pass original string back
 
+# --- All Delete Orders Route ---
+@app.route('/orders/all_delete', methods=['POST'])
+@login_required
+def all_delete_orders():
+    """Deletes all orders from the database."""
+    try:
+        num_deleted = Order.query.delete()
+        db.session.commit()
+        flash(f'成功删除了 {num_deleted} 条记录。', 'success')
+    except Exception as e:
+        db.session.rollback()
+    
+    return redirect(url_for('index')) # Redirect back to the main list page
+
 # --- NEW Batch Delete Route ---
 @app.route('/orders/batch_delete', methods=['POST'])
 @login_required
