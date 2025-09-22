@@ -135,7 +135,7 @@ def index():
                            supplier_query=supplier_query, # To pre-fill search boxes
                            customer_query=customer_query_string) # Pass original string back
 
-# --- All Delete Orders Route ---
+# --- Delete All Orders add(2025-9-17) v1.1.0 by wxybabymichael ---
 @app.route('/orders/all_delete', methods=['POST'])
 @login_required
 def all_delete_orders():
@@ -148,6 +148,7 @@ def all_delete_orders():
         db.session.rollback()
     
     return redirect(url_for('index')) # Redirect back to the main list page
+# --- End Delete All Orders add(2025-9-17) v1.1.0 by wxybabymichael ---
 
 # --- NEW Batch Delete Route ---
 @app.route('/orders/batch_delete', methods=['POST'])
