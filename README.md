@@ -63,10 +63,10 @@ Sample Excel File (data.xlsx):
 
 Make sure your Excel file has headers matching the expected names (or adjust expected_columns in app.py).
 
-供应商名称	客户名称	金额	发放时间	电话
-供应商A	刘中强	63.41	2024-08-06 10:12:07	18312347159
-供应商B	刘影丽	29.38	2024-08-06 10:12:07	18912344926
-供应商C	吕晓辉	28.87	2024/08/06 10:12:07	15112349599
+Suplier	    Customer	Amount	DateTime	        Phone
+Suplier_A	AAA        	12.34	2025-01-01 10:10:10	18012345678
+Suplier_B	BBB	        12.34	2025-01-01 10:10:10	18012345678
+Suplier_C	CCC	        12.34	2025/01/01 10:12:10	18012345678
 
 ## Common Use:
 ```
@@ -74,3 +74,4 @@ cd simple_order
 .\.venv\Scripts\Activate.ps1
 python app.py
 ```
+
