@@ -31,7 +31,7 @@
     </form>
     <!-- End Search Form -->
 
-    <!-- All Delete Form - Separate form for deleting all records ---->
+    <!-- All Delete Form - Separate form for deleting all records add(2025-9-17) v1.0.1 by wxybabymichael---->
     <form id="all-action-form" method="POST" action="{{ url_for('all_delete_orders') }}" onsubmit="return confirmAllDelete();">
         <div class="mb-2">
             {# All Delete Button #}
@@ -44,7 +44,7 @@
             </button>
         </div>
     </form>
-    <!-- End All Delete Form -->
+    <!-- End All Delete Form add(2025-9-17) v1.0.1 by wxybabymichael-->
 
     <!-- Batch Action Form - Wraps the table and batch delete button -->
     <form id="batch-action-form" method="POST" action="{{ url_for('batch_delete_orders') }}" onsubmit="return confirmBatchDelete();">
@@ -211,11 +211,12 @@
              }
 
         }); // End DOMContentLoaded
-
-        // Confirmation for All Delete (global function for onsubmit)
+        
+        // Confirmation for All Delete (global function for onsubmit) add(2025-9-17) v1.1.0--- by wxybabymichael
         function confirmAllDelete() {
             return confirm('确定要删除所有记录吗？此操作不可撤销！'); // Confirm before submission
         }
+        // End Confirmation for All Delete (global function for onsubmit) add(2025-9-17) v1.1.0--- by wxybabymichael
         
         // Confirmation for Batch Delete (global function for onsubmit)
         function confirmBatchDelete() {
